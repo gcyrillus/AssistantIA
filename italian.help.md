@@ -16,7 +16,7 @@ Questo plugin è compilato con l'opzione `/MD` ed è esclusivamente progettato p
 - **Dipendenza di sistema**: Essendo compilato in `/MD`, il pacchetto ***Microsoft Visual C++ Redistributable*** deve essere installato sulla tua macchina affinché Windows possa caricare il plugin.
 
 ### Download e installazione
-1. Scarica l'ultima versione del plugin da GitHub.
+1. Scarica l'ultima versione del plugin da GitHub. https://github.com/gcyrillus/AssistantIA
 2. Estraisci l'archivio scaricato in una directory temporanea a tua scelta.
 3. Copia la cartella completa `AssistenteIA` (che contiene la DLL e le sue dipendenze).
 4. Incolla questa cartella nella directory dei plugin di Notepad++ (solitamente situata in `C:\Program Files\Notepad++\plugins`).
