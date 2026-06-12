@@ -1,0 +1,237 @@
+﻿#include <windows.h>
+#pragma code_page(65001)
+#define IDC_STATIC -1
+
+// Définitions des ID (pour correspondre au code C++)
+#define IDD_CONSOLE_PANEL  2000
+#define IDC_CONSOLE_EDIT   2001
+#define IDC_CONSOLE_INPUT  2002
+#define IDC_CONSOLE_PROMPT 2003
+
+// 3. --- LES NOUVEAUX IDs DU FORMULAIRE (À coller ici !) ---
+#define IDD_NEW_SCRIPT_DLG   2010
+#define IDC_EDIT_LOCAL_NAME  2011
+#define IDC_EDIT_PROVIDER    2012
+#define IDC_EDIT_API_URL     2013
+#define IDC_EDIT_MODEL_URL   2014
+#define IDC_EDIT_REG_URL     2015
+#define IDC_STATIC_REG_URL   2016
+#define IDC_EDIT_API_KEY     2017
+#define IDC_STATIC_NAME      2018
+#define IDC_STATIC_PROVIDER  2019
+#define IDC_STATIC_API_URL   2020
+#define IDC_STATIC_MODEL_URL 2021
+#define IDC_STATIC_API_KEY   2022
+#define IDOK_DO_SCRIPT       2023
+
+// --- IDs de la fenetre liste/edition scripts utilisateur ---
+#define IDD_MANAGE_SCRIPTS    2024
+#define IDC_LIST_SCRIPTS      2025
+#define IDC_BTN_EDIT_SCRIPT   2026
+#define IDC_BTN_DELETE_SCRIPT 2027
+#define IDC_BTN_CREATE_SCRIPT 2028
+
+// ID Aide
+#define IDD_HELP_DLG         2030
+#define IDC_HELP_RICHEDIT    2031
+#define IDC_HELP_BTN_OK      2032
+
+//--- ID VERSIONINFO ---
+#define IDC_VERSION_TEXT     2100
+#define IDD_VERSION          2101
+
+#define IDD_MAIN_CONFIG_DLG     2200
+#define IDC_CHK_CONSOLE         2201
+#define IDC_CHK_FORCECLOSE      2202
+#define IDC_CMB_ACTIVE_API      2203
+#define IDC_BTN_MANAGE_API      2204
+#define IDC_STATIC_API_PROVIDER 2205
+
+#define IDD_PROMPT_IA       2300
+#define IDC_PROMPT_TEXT     2301
+#define IDC_CHK_SAVE_LOG    2302
+#define IDC_STATIC_ASK_IA   2303
+
+// --- IDENTIFIANTS BOÎTE CLÉ MANQUANTE ---
+#define IDD_SETUP_API_DLG     2500
+#define IDC_SETUP_API_LINK    2501
+#define IDC_SETUP_API_KEY     2502
+
+// --- IDENTIFIANTS BOÎTE DE CHAT ---
+#define IDD_CHAT_DLG                3000
+#define IDC_CHAT_STATIC_MODEL       3001
+#define IDC_CHAT_MODEL_COMBO        3002
+#define IDC_CHAT_HISTORY            3003
+#define IDC_CHAT_INPUT              3004
+#define IDC_BTN_SEND                3005
+#define IDC_BTN_CLEAR               3006
+#define IDC_CHK_SAVE_CHAT           3007
+
+// Définition de la boîte de dialogue pour le panneau console
+IDD_CONSOLE_PANEL DIALOGEX 0, 0, 300, 200
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_VISIBLE
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "", IDC_CONSOLE_EDIT, "RichEdit50W", ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL, 0, 0, 300, 175
+    LTEXT           " >>> :",IDC_CONSOLE_PROMPT,5,178,40,10 , WS_VISIBLE
+    EDITTEXT        IDC_CONSOLE_INPUT, 45, 175, 250, 20,  WS_BORDER | WS_TABSTOP 
+END
+
+// Définition de la boîte de dialogue "Nouveau Script"
+IDD_NEW_SCRIPT_DLG DIALOGEX 0, 0, 260, 180
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Ajouter un nouveau fournisseur API"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Nom affiché :", IDC_STATIC_NAME, 10, 12, 80, 10
+    EDITTEXT        IDC_EDIT_LOCAL_NAME, 95, 10, 150, 14, ES_AUTOHSCROLL
+
+    LTEXT           "Nom fournisseur :", IDC_STATIC_PROVIDER, 10, 32, 80, 10
+    EDITTEXT        IDC_EDIT_PROVIDER, 95, 30, 150, 14, ES_AUTOHSCROLL
+
+    LTEXT           "URL API :", IDC_STATIC_API_URL, 10, 52, 80, 10
+    EDITTEXT        IDC_EDIT_API_URL, 95, 50, 150, 14, ES_AUTOHSCROLL
+
+    LTEXT           "URL Models :", IDC_STATIC_MODEL_URL, 10, 72, 80, 10
+    EDITTEXT        IDC_EDIT_MODEL_URL, 95, 70, 150, 14, ES_AUTOHSCROLL
+
+    LTEXT           "URL Inscription :", IDC_STATIC_REG_URL, 10, 92, 80, 10
+    EDITTEXT        IDC_EDIT_REG_URL, 95, 90, 150, 14, ES_AUTOHSCROLL
+
+    LTEXT           "API Key (Optionnel):", IDC_STATIC_API_KEY, 10, 112, 80, 10
+    EDITTEXT        IDC_EDIT_API_KEY, 95, 110, 150, 14, ES_AUTOHSCROLL | ES_PASSWORD
+
+    DEFPUSHBUTTON   "Créer le script", IDOK_DO_SCRIPT, 125, 155, 65, 14
+    PUSHBUTTON      "Fermer", IDCLOSE, 195, 155, 50, 14
+END
+
+IDD_MANAGE_SCRIPTS DIALOGEX 0, 0, 200, 150
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Gestion des scripts"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LISTBOX         IDC_LIST_SCRIPTS, 10, 10, 180, 100, LBS_HASSTRINGS | LBS_NOTIFY | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Créer", IDC_BTN_CREATE_SCRIPT, 10, 125, 40, 14
+    PUSHBUTTON      "Éditer", IDC_BTN_EDIT_SCRIPT, 55, 125, 40, 14
+    PUSHBUTTON      "Effacer", IDC_BTN_DELETE_SCRIPT, 100, 125, 40, 14
+    PUSHBUTTON      "Fermer", IDCLOSE, 145, 125, 45, 14 
+END
+
+IDD_MAIN_CONFIG_DLG DIALOGEX 0, 0, 200, 130
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configuration Générale"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    CONTROL         "Afficher la console au démarrage", IDC_CHK_CONSOLE, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 15, 15, 170, 10
+    CONTROL         "Fermeture forcée à la suppression", IDC_CHK_FORCECLOSE, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 15, 30, 170, 10
+    
+    LTEXT           "API / Fournisseur actif :", IDC_STATIC_API_PROVIDER, 15, 52, 100, 8
+    COMBOBOX        IDC_CMB_ACTIVE_API, 15, 64, 110, 100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Configurer", IDC_BTN_MANAGE_API, 130, 63, 55, 14
+    
+    DEFPUSHBUTTON   "Valider", IDOK, 45, 100, 50, 14
+    PUSHBUTTON      "Annuler", IDCANCEL, 105, 100, 50, 14
+END
+
+IDD_PROMPT_IA DIALOGEX 0, 0, 350, 200
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Interroger l'Assistant IA"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    LTEXT           "Que souhaitez-vous demander à l'IA concernant ce code ?", IDC_STATIC_ASK_IA, 10, 10, 230, 10
+    EDITTEXT        IDC_PROMPT_TEXT, 10, 25, 320, 135, ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Enregistrer l'action dans l'historique", IDC_CHK_SAVE_LOG, "Button", BS_AUTOCHECKBOX | WS_TABSTOP, 10, 167, 180, 10
+    DEFPUSHBUTTON   "Valider", IDOK, 225, 165, 50, 14
+    PUSHBUTTON      "Annuler", IDCANCEL, 280, 165, 50, 14
+END
+
+
+IDD_SETUP_API_DLG DIALOGEX 0, 0, 250, 100
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Configuration Initiale Requise"
+FONT 9, "Segoe UI", 400, 0, 0x1
+BEGIN
+    LTEXT           "Une clé API est requise pour utiliser l'Assistant IA.", IDC_STATIC, 15, 15, 220, 10
+    PUSHBUTTON      "Obtenir une clé API gratuite (Ouvrir le site)", IDC_SETUP_API_LINK, 15, 30, 220, 16
+    LTEXT           "Collez votre clé API ici :", IDC_STATIC, 15, 55, 100, 10
+    EDITTEXT        IDC_SETUP_API_KEY, 15, 68, 220, 14, ES_AUTOHSCROLL | ES_PASSWORD
+    DEFPUSHBUTTON   "Enregistrer", IDOK, 130, 80, 50, 14
+    PUSHBUTTON      "Annuler", IDCANCEL, 185, 80, 50, 14
+END
+
+
+IDD_CHAT_DLG DIALOGEX 0, 0, 350, 250
+STYLE DS_SETFONT | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Assistant IA - Chat"
+FONT 9, "Segoe UI", 400, 0, 0x1
+BEGIN
+    LTEXT           "Modèle actif :", IDC_CHAT_STATIC_MODEL, 10, 10, 50, 10
+    COMBOBOX        IDC_CHAT_MODEL_COMBO, 65, 8, 150, 100, CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "", IDC_CHAT_HISTORY, "RichEdit50W", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY, 10, 25, 330, 150
+    EDITTEXT        IDC_CHAT_INPUT, 10, 185, 280, 40, ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "RESET", IDC_BTN_CLEAR, "BUTTON", BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 300, 185, 40, 18
+    CONTROL         "Envoyer", IDC_BTN_SEND, "BUTTON", BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 300, 205, 40, 18
+    AUTOCHECKBOX    "Enregistrer la conversation", IDC_CHK_SAVE_CHAT, 10, 230, 150, 10
+END
+
+
+IDD_HELP_DLG DIALOGEX 0, 0, 400, 300
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MAXIMIZEBOX
+CAPTION "Assistant IA - Guide d'utilisation"
+FONT 9, "Segoe UI", 400, 0, 0x1
+BEGIN
+    CONTROL         "", IDC_HELP_RICHEDIT, "RichEdit50W", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | ES_MULTILINE | ES_READONLY, 10, 10, 380, 255
+    DEFPUSHBUTTON   "Fermer", IDC_HELP_BTN_OK, 310, 275, 80, 16
+END
+
+IDD_VERSION DIALOGEX 0, 0, 340, 200
+STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "À propos de AssistantIA"
+FONT 10, "Segoe UI"          // ← police standard Windows, taille raisonnable
+BEGIN
+    CONTROL "", IDC_VERSION_TEXT, "STATIC",
+        SS_LEFT | WS_CHILD | WS_VISIBLE | SS_NOPREFIX | SS_CENTER | SS_SUNKEN,
+        10, 10, 320, 170
+
+    PUSHBUTTON "OK", IDOK,
+        120, 185, 100, 14
+END
+
+
+
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040c04b0" // Code de langue : Français, Unicode
+        BEGIN
+            VALUE "CompanyName", "👤 Gcyrillus AKA GC-nomade"
+            VALUE "Assistant", "✨ Gemini (free) flash-lite/flash/Pro - extended"
+            VALUE "FileDescription", "🧩 Plugin Assistant IA pour Notepad++"
+            VALUE "icoVersion","🏷️ "
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "AssistantIA.dll"
+            VALUE "Licence","✒️ Attribution-NonCommercial-ShareAlike 4.0 International"
+            VALUE "LegalCopyright", "⚖️ Copyright ©️ 2026"
+            VALUE "OriginalFilename", "🔌 AssistantIA.dll"
+            VALUE "ProductName", "🐸 AssistantIA"
+            VALUE "ProductVersion", "⚙️ Alpha 0.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x40c, 1200
+    END
+END
