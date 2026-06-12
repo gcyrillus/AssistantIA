@@ -33,7 +33,7 @@ Paramètres | Configuration générale | Afficher console au démarrage, fermetu
  | Persistance paramètres | Booléens (console, log sélection) persistés dans AssistantIA.ini via API Windows WritePrivateProfileString | C++ | Auto
 **Informations plugin** |  |  |  | 
 Meta | Aide intégrée | Fenêtre RichEdit50W redimensionnable affichant le guide d'utilisation en RTF | C++ | Menu
- | À propos / Version | Informations produit (auteur, licence CC BY-NC-SA 4.0, version, nom DLL) lues depuis VERSIONINFO | C++ | Menu
+ | À propos / Version | Informations produit (auteur, licence  GNU AFFERO GENERAL PUBLIC LICENSE, version, nom DLL) lues depuis VERSIONINFO | C++ | Menu
 
 C++ = AssistantIA.cpp/rc  
 Python = config_manager.py / template.py / logger.py  
